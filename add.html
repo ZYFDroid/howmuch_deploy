@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>预算管理</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-3.6.0.js"></script>
+    <script src="sweetalert.min.js"></script>
+    <script src="common.js"></script>
+
+    <style>
+
+        
+.keyboard{
+    padding: 5px;
+    height: 40vh;
+    display: grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-template-rows: repeat(4,1fr);
+    grid-template-areas: "n1 n2 n3 bs"
+                         "n4 n5 n6 ok1"
+                         "n7 n8 n9 ok"
+                         "n0 n0 nd ok";
+    background-color: rgb(238, 238, 238);
+}
+
+
+.txtbtn{
+            font-size: 24px;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="header" style="padding-right: 50px;"><p class="back" onclick="window.history.back()">&lt;</p><p>预算管理</p></div>
+    <div class="flexspace"></div>
+    <p class="hint">预算修改：</p>
+    <div class="input">
+        <span id="input"></span>
+    </div>
+
+    <div class="flexspace"></div>
+
+    <div class="keyboard">
+        <div class="num key" style="grid-area: n1;">1</div>
+        <div class="num key" style="grid-area: n2;">2</div>
+        <div class="num key" style="grid-area: n3;">3</div>
+        <div class="num key" style="grid-area: n4;">4</div>
+        <div class="num key" style="grid-area: n5;">5</div>
+        <div class="num key" style="grid-area: n6;">6</div>
+        <div class="num key" style="grid-area: n7;">7</div>
+        <div class="num key" style="grid-area: n8;">8</div>
+        <div class="num key" style="grid-area: n9;">9</div>
+        <div class="num key" style="grid-area: n0;">0</div>
+        <div class="dot key" style="grid-area: nd;">.</div>
+        <div class="backspace key" style="grid-area: bs;"><img src="backspace.png" width="40px" height="30px" alt=""></div>
+        <div class="txtbtn btnok key" style="grid-area: ok;color: white;">增加<br>预算</div>
+        <div class="txtbtn btnok1 key" style="grid-area: ok1; ">减少<br>预算</div>
+    </div>
+
+    <script>
+        $(".num").click((n)=>{
+            var txt= $("#input");
+            if(txt.text().length>=12){return;}
+            txt.text(txt.text()+n.target.innerHTML);
+        });
+        $(".dot").click((n)=>{
+            var txt= $("#input");
+            var t = txt.text();
+            if(t.indexOf(".")!=-1){
+                return;
+            }
+            txt.text(txt.text()+n.target.innerHTML);
+        });
+        $(".backspace").click((n)=>{
+            var txt= $("#input");
+            var t = txt.text();
+            if(t.length>0){
+                t = t.substring(0,t.length-1);
+            }
+            txt.text(t);
+        });
+
+        $(".btnok").click((n)=>{
+            var txt= $("#input");
+            var t = txt.text();
+            if(t==""){
+                return;
+            }
+            var num = parseFloat(t);
+            if(isNaN(num) || !isFinite(num)){
+                swal("输入有误","请输入正确的数字。","info");
+                return;
+            }
+            if(num>100000000){
+                swal("超出范围","数字大小超出精度范围，如果您真的有这么多预算，建议不要用这个软件。\r\n\r\n如果您生活在严重通货膨胀的地区，请按比例缩放数值。","info");
+                return;
+            }
+            NextCalc.addBudget(num);
+            swal("预算添加成功","","success").then(()=>{
+                window.history.back();
+            });
+        });
+        $(".btnok1").click((n)=>{
+            var txt= $("#input");
+            var t = txt.text();
+            if(t==""){
+                return;
+            }
+            var num = parseFloat(t);
+            if(isNaN(num) || !isFinite(num)){
+                swal("输入有误","请输入正确的数字。","info");
+                return;
+            }
+            if(num>100000000){
+                swal("超出范围","数字大小超出精度范围，如果您真的有这么多预算，建议不要用这个软件。\r\n\r\n如果您生活在严重通货膨胀的地区，请按比例缩放数值。","info");
+                return;
+            }
+            if(num> NextCalc.getAvailableAmount()){
+                swal("超出范围","数字大小超出本月剩余生活费","info");
+                return;
+            }
+
+            NextCalc.removeBudget(num);
+
+            swal("预算修改成功","","success").then(()=>{
+                window.history.back();
+            });
+        });
+
+
+    </script>
+
+</body>
+</html>

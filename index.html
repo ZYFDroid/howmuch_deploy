@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>我下一顿饭可以花多少钱</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-3.6.0.js"></script>
+    <script src="sweetalert.min.js"></script>
+    <script src="common.js"></script>
+    <style>
+        .next{
+            width: 100%;
+            text-align: center;
+        }
+        #nextmoney{
+            font-size: 80px;
+            color: var(--theme);
+            line-height: 60vh;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="header"><p>我下一顿饭可以花多少钱</p></div>
+    <div class="next">
+        <p id="nextmoney">0.00</p>
+        <p class="themetext">本月总生活费 <span id="total">0</span>，剩余 <span id="estimate">0</span></p>
+        
+    </div>
+    <div class="warn" style="display: none; text-align: center; margin: auto; font-size: 14px; line-height: 24px; color: red;">
+        <img src="warn.png" width="24px" height="24px" align="left" alt=""><span id="warntxt">警告</span>
+    </div>
+    <div class="buttons">
+        <button id="btnbudget"  class="largebutton commonbutton buttonblue">预算管理</button>
+        <button id="btnconsume" class="largebutton commonbutton buttonorange">记录消费</button>
+    </div>
+    <div class="flexspace"></div>
+    <div class="links">
+        <a href="setting.html">设置</a> <a href="history.html">历史记录</a>
+    </div>
+    <script>
+        $("#nextmoney").text(NextCalc.formatNumber(NextCalc.computeNext()));
+        $("#estimate").text(NextCalc.formatNumber(NextCalc.getAvailableAmount()));
+        $("#total").text(NextCalc.formatNumber(NextCalc.totalAmount));
+        
+        $("#btnbudget").click(()=>{
+            window.location.href="add.html";
+        });
+        $("#btnconsume").click(()=>{
+            window.location.href="consume.html";
+        });
+        var warn = NextCalc.getWarnLevel();
+        if(warn>0){
+            $(".warn").show();
+            if(warn==1){
+                $("#warntxt").text("本月预算已超支，可能会在月末之前耗尽，请调整支出。");
+            }
+            if(warn==2){
+                $("#warntxt").text("预算已耗尽。");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-3.6.0.js"></script>
+    <script src="sweetalert.min.js"></script>
+    <script src="common.js"></script>
+    <style>
+        .edittext{
+            font-size: 16px;
+            line-height: 40px;
+            height: 40px;
+            width: 100%;
+            box-sizing: border-box;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-top: none;
+            border-bottom: solid gray 2px;
+            border-left: none;
+            border-right: none;
+        }
+        .edittext:focus,.edittext:focus-within,.edittext:focus-visible{
+            border-top: none;
+            border-bottom: solid var(--theme) 2px;
+            border-left: none;
+            border-right: none; 
+        }
+
+        .buttonok{
+            width: 100%;
+            height: 50px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="header" style="padding-right: 50px;"><p class="back" onclick="window.history.back()">&lt;</p><p>设置</p></div>
+    <div style="overflow: auto; flex-grow: 2; padding: 8px; box-sizing: border-box;" >
+        
+        <form name="setting" action="javascript:void(0)" onsubmit="saveSettings()">
+            <p>每月总预算：</p>
+            <input type="text" name="monthBudget" class="edittext" id="">
+            <p>吃饭最低消费：</p>
+            <input type="text" name="minMeal" class="edittext" id="">
+
+            <input class="commonbutton buttonblue buttonok" type="submit" value="提交">
+        </form>
+
+    </div>
+
+    <div class="flexspace"></div>
+    <div class="links">
+        <a href="javascript:reset()">重置程序</a>
+    </div>
+
+    <script>
+        document.setting.monthBudget.value = NextCalc.getDefaultBudget();
+        document.setting.minMeal.value = NextCalc.minMeal;
+
+        function saveSettings() {
+            var defBudget = parseFloat(document.setting.monthBudget.value);
+            var minmeal = parseFloat(document.setting.minMeal.value);
+            if(isNaN(minmeal) || minmeal<0){
+                swal("请输入正确的最低消费");
+                return;
+            }
+            if(isNaN(defBudget) || defBudget<0){
+                swal("请输入正确的每月预算");
+                return;
+            }
+
+            NextCalc.setDefaultBudget(defBudget);
+            NextCalc.minMeal = minmeal;
+            NextCalc.saveState();
+            swal("设置保存成功");
+        }
+
+        function reset(){
+            swal({
+                  title: "是否重置数据",
+                  text: "本月的数据将会回到初始状态，并且无法恢复",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+                    NextCalc.clear();
+                    NextCalc.saveState();
+                    swal("重置完成", {
+                      icon: "success",
+                    });
+                  }
+                });
+        }
+    </script>
+</body>
+</html>

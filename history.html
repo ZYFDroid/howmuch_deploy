@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消费记录</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-3.6.0.js"></script>
+    <script src="sweetalert.min.js"></script>
+    <script src="common.js"></script>
+    <style>
+        .listitem{
+            height: 50px;
+        }
+
+        .content{
+            margin-left: 10px;
+            
+        }
+        .line{
+            width:100%;
+            height: 1px;
+            background-color: gray;
+        }
+        .template{
+            display: none;
+        }
+
+        .listinner{
+            display: flex;
+            align-items: center;
+            height: 50px;
+        }
+        .delete{
+            background-color: red;
+            color: white;
+            border-radius: 4px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header" style="padding-right: 50px;"><p class="back" onclick="window.history.back()">&lt;</p><p>消费记录</p></div>
+    <div class="template">
+        <div class="listitem">
+            <div class="line"></div>
+            <div class="listinner">
+                <p style="padding-left: 10px;">在 {DAY} {TYPE}了 {AMOUNT} </p>
+                <div class="flexspace"></div>
+                <div class="delete" onclick="deleteEntryAt({ID})">删除记录</div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="list" style="overflow: auto; flex-grow: 2;" >
+        
+    </div>
+
+    <script>
+        var result="";
+        var template = $(".template").html();
+
+        for (let index = 0; index < NextCalc.entrySequence.length; index++) {
+            const element = NextCalc.entrySequence[index];
+            var typestr="";
+            if(element.type==0){
+                typestr="吃饭消费";
+            }
+            if(element.type==1){
+                typestr="其他消费";
+            }
+            result+=template.replace("{DAY}",dateFormat("yyyy-MM-dd HH:mm",element.date))
+                                .replace("{AMOUNT}",element.amount).replace("{TYPE}",typestr)
+                                .replace("{ID}",index);
+        }
+
+        $(".list").html(result);
+
+        function deleteEntryAt(num){
+            swal({
+                  title: "是否删除这一条数据",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  NextCalc.entrySequence.splice(num,1);
+                  NextCalc.saveState();
+                  if (willDelete) {
+                    swal("删除完成", {
+                      icon: "success",
+                    }).then(()=>{
+                        window.location.reload();
+                    });
+                  }
+                });
+        }
+    </script>
+</body>
+</html>
