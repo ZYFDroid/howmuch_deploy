@@ -1,0 +1,16 @@
+{
+  "name": "我下顿饭该花多少钱",
+  "short_name": "下顿饭", 
+  "description": "我下顿饭该花多少钱",
+  "display": "standalone", 
+  "start_url": "/", 
+  "theme_color": "#313131", 
+  "background_color": "#313131", 
+  "icons": [ 
+    {
+    "src": "icon.png",
+    "sizes": "64x64",
+    "type": "image/png"
+    }
+  ]
+}

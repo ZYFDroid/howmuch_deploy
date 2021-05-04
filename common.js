@@ -1,5 +1,7 @@
 
 
+
+
 function dateFormat(fmt, date) {
     let ret;
     const opt = {
@@ -20,7 +22,17 @@ function dateFormat(fmt, date) {
     return fmt;
 }
 
-
+function update(){
+    if('serviceWorker' in navigator){
+    	navigator.serviceWorker.getRegistrations().then(function(registrations) {
+	    	for(let registration of registrations) {
+		    	registration.unregister();
+		    }
+	    });
+    }
+    
+	swal("缓存清除成功，下次启动后生效");
+}
 
 var NextCalc = {
     getMonthDays:function(){
@@ -237,3 +249,14 @@ var NextCalc = {
     }
 };
 NextCalc.loadState();
+
+
+if ('serviceWorker' in navigator) {           
+    navigator.serviceWorker.register('/service-worker.js', {scope: '/'}).then(function (registration) {
+      // 注册成功
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }).catch(function (err) {                   
+        // 注册失败 :(
+        console.log('ServiceWorker registration failed: ', err);
+    });
+}
