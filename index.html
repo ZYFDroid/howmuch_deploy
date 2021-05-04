@@ -24,6 +24,18 @@
     </style>
 </head>
 <body>
+	
+	<script>
+	let deferredPrompt;
+
+	window.addEventListener('beforeinstallprompt', (e) => {
+		//e.preventDefault();
+		deferredPrompt = e;
+		//showInstallPromotion();
+		console.log(`'beforeinstallprompt' event was fired.`);
+	});
+	</script>
+
     <div class="header"><p>我下一顿饭可以花多少钱</p></div>
     <div class="next">
         <p id="nextmoney">0.00</p>
