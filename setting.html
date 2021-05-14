@@ -43,10 +43,12 @@
         
         <form name="setting" action="javascript:void(0)" onsubmit="saveSettings()">
             <p>每月总预算：</p>
-            <input type="text" name="monthBudget" class="edittext" id="">
+            <input type="text" name="monthBudget" class="edittext">
             <p>吃饭最低消费：</p>
-            <input type="text" name="minMeal" class="edittext" id="">
-
+            <input type="text" name="minMeal" class="edittext">
+            <p>本月总预算：</p>
+            <input type="text" name="currentBudget" class="edittext">
+            
             <input class="commonbutton buttonblue buttonok" type="submit" value="提交">
         </form>
 
@@ -54,16 +56,18 @@
 
     <div class="flexspace"></div>
     <div class="links">
-        版本号:1.1.0.2　<a href="javascript:reset()">重置程序</a>　<a href="javascript:update()">检查更新</a>
+        版本号:1.2.0.0　<a href="javascript:reset()">重置程序</a>
     </div>
 
     <script>
         document.setting.monthBudget.value = NextCalc.getDefaultBudget();
         document.setting.minMeal.value = NextCalc.minMeal;
-
+        document.setting.currentBudget.value = NextCalc.totalAmount;
         function saveSettings() {
             var defBudget = parseFloat(document.setting.monthBudget.value);
             var minmeal = parseFloat(document.setting.minMeal.value);
+            var currentBudget = parseFloat(document.setting.currentBudget.value);
+            
             if(isNaN(minmeal) || minmeal<0){
                 swal("请输入正确的最低消费");
                 return;
@@ -72,9 +76,13 @@
                 swal("请输入正确的每月预算");
                 return;
             }
-
+            if(isNaN(currentBudget) || currentBudget<0){
+                swal("请输入正确的本月总预算");
+                return;
+            }
             NextCalc.setDefaultBudget(defBudget);
             NextCalc.minMeal = minmeal;
+            NextCalc.totalAmount = currentBudget;
             NextCalc.saveState();
             swal("设置保存成功");
         }

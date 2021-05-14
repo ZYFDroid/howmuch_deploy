@@ -22,18 +22,6 @@ function dateFormat(fmt, date) {
     return fmt;
 }
 
-function update(){
-    if('serviceWorker' in navigator){
-    	navigator.serviceWorker.getRegistrations().then(function(registrations) {
-	    	for(let registration of registrations) {
-		    	registration.unregister();
-		    }
-	    });
-    }
-    
-	swal("缓存清除成功，下次启动后生效");
-}
-
 var NextCalc = {
     getMonthDays:function(){
         var monthdays=[31,28,31,30,31,30,31,31,30,31,30,31];

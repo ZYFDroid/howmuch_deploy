@@ -21,8 +21,18 @@ self.addEventListener('install', event => {
 */
 
 var fetchHandler = function(event){
+  
+
   event.respondWith(caches.match(event.request).then(
     function(response){
+      if(event.request.url.endsWith("version.js")){
+        return (fetch(event.request).then(
+          function (response) {
+            return response;
+          }
+        ));
+      }
+
       if(response){
         return response;
       }
