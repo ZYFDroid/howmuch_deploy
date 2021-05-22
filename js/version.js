@@ -1,9 +1,9 @@
 var versionKey="_version";
-var versionName = "2.0.0.1";
-var versionCode=2000001;
+var versionName = "2.0.0.2";
+var versionCode=2000002;
 var cacheName="howmuch_v1";
 
-var devMode = true;
+var devMode = false;
 if(devMode){
     versionCode =Math.floor(Math.random() * 999999);
 }
