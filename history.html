@@ -8,6 +8,7 @@
     <script src="lib/jquery-3.6.0.js"></script>
     <script src="lib/sweetalert.min.js"></script>
     <script src="js/common.js"></script>
+    <script src="lib/vue.js"></script>
     <style>
         .listitem{
             height: 50px;
@@ -41,20 +42,19 @@
 </head>
 <body>
     <div class="header2" ><p>消费记录</p></div>
-    <div class="template">
-        <div class="listitem">
+
+
+    <div id="list" class="list" style="box-sizing: border-box;overflow: scroll;flex-grow: 2;flex-shrink: 1;" >
+
+        <div class="listitem" v-for="entry in entries">
             <div class="line"></div>
             <div class="listinner">
-                <p style="padding-left: 10px;">在 {DAY} {TYPE}了 {AMOUNT} </p>
+                <p style="padding-left: 10px;">在{{entry.date}}{{entry.type}}了{{entry.amount}}</p>
                 <div class="flexspace"></div>
-                <div class="commonbutton bumpshadow delete" onclick="deleteEntryAt({ID})">删除记录</div>
+                <div class="commonbutton bumpshadow delete" v-on:click="deleteEntryAt(entry.index)">删除记录</div>
             </div>
             
         </div>
-    </div>
-
-    <div class="list" style="overflow: auto; flex-grow: 2;" >
-        
     </div>
 
     <div class="bottomnav bumpshadow">
@@ -77,46 +77,51 @@
 
 
     <script>
-        var result="";
-        var template = $(".template").html();
+        var vueapp=new Vue({
+            el:"#list",
+            data:{
+                entries:[]
+            },
+            methods:{
+                deleteEntryAt:function(num){
+                    swal({
+                          title: "是否删除这一条数据",
+                          icon: "warning",
+                          buttons: true,
+                          dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                 NextCalc.entrySequence.splice(num,1);
+                                 NextCalc.saveState();
+                                 swal("删除完成", {
+                                   icon: "success",
+                                 }).then(()=>{
+                                     window.location.reload();
+                                 });
+                             }
+                        });
+                }
+            }
+
+        });
 
         for (let index = 0; index < NextCalc.entrySequence.length; index++) {
             const element = NextCalc.entrySequence[index];
-            var typestr="";
+            var entry={};
+            entry.type="";
             if(element.type==0){
-                typestr="吃饭消费";
+                entry.type="吃饭消费";
             }
             if(element.type==1){
-                typestr="其他消费";
+                entry.type="其他消费";
             }
-            result+=template.replace("{DAY}",dateFormat("yyyy-MM-dd HH:mm",element.date))
-                                .replace("{AMOUNT}",element.amount).replace("{TYPE}",typestr)
-                                .replace("{ID}",index);
+            entry.index=index;
+            entry.date=dateFormat("yyyy-MM-dd HH:mm",element.date);
+            entry.amount=element.amount;
+            vueapp.entries.push(entry);
         }
 
-        $(".list").html(result);
-
-        function deleteEntryAt(num){
-            swal({
-                  title: "是否删除这一条数据",
-                  icon: "warning",
-                  buttons: true,
-                  dangerMode: true,
-                })
-                .then((willDelete) => {
-                  
-
-                  if (willDelete) {
-                    NextCalc.entrySequence.splice(num,1);
-                    NextCalc.saveState();
-                    swal("删除完成", {
-                      icon: "success",
-                    }).then(()=>{
-                        window.location.reload();
-                    });
-                  }
-                });
-        }
     </script>
 </body>
 </html>
