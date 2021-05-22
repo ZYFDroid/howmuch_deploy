@@ -13,25 +13,21 @@ self.addEventListener('install', event => {
   );
 });
   
-/**
-为 fetch 事件添加一个事件监听器。接下来，使用 caches.match() 函数来检查传入的请求 URL 是否匹配当前缓存中存在的任何内容。如果存在的话，返回缓存的资源。
-如果资源并不存在于缓存当中，通过网络来获取资源，并将获取到的资源添加到缓存中。
-*/
 
 var fetchHandler = function(event){
-  
+
+  //不缓存version.js防止版本无法更新
+  if(event.request.url.endsWith("version.js")){
+    event.respondWith(fetch(event.request).then(
+      function (response) {
+        return response;
+      }
+    ));
+    return;
+  }
 
   event.respondWith(caches.match(event.request).then(
     function(response){
-      //不缓存version.js防止版本无法更新
-      if(event.request.url.endsWith("version.js")){
-        return (fetch(event.request).then(
-          function (response) {
-            return response;
-          }
-        ));
-      }
-
       if(response){
         return response;
       }

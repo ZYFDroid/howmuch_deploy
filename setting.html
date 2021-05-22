@@ -46,35 +46,37 @@
             <p>本月总预算：</p>
             <input type="text" name="currentBudget" class="shrinkshadow edittext">
             <input class="bumpshadow commonbutton buttonblue buttonok" type="submit" value="保存设置">
-            <input class="bumpshadow commonbutton buttonblue buttonok" id="btnbudget" value="预算加减">
+            <input class="bumpshadow commonbutton buttonblue buttonok" type="button" id="btnbudget" value="预算加减">
         </form>
 
     </div>
 
     <div class="flexspace"></div>
     <div class="links">
-        版本号:2.0.0.3　<a href="javascript:reset()">重置程序</a>
+        版本号:<span id="versionname"> - </span>　<a href="javascript:reset()">重置程序</a>
     </div>
 
     
     <div class="bottomnav bumpshadow">
-        <a href="index.html" class="navitem">
+        <a onclick="window.location.replace('index.html')" class="navitem">
             <img src="img/menu-home-normal.png" alt="" width="20" height="20">
             <p>首页</p>
         </a>
 
 
-        <a href="history.html" class="navitem">
+        <a onclick="window.location.replace('history.html')" class="navitem">
             <img src="img/bill.png" alt="" width="20" height="20">
             <p>账单</p>
         </a>
         
-        <a href="setting.html" class="selected navitem">
+        <a onclick="window.location.replace('setting.html')" class="selected navitem">
             <img src="img/setting-copy.png" alt="" width="20" height="20">
             <p>设置</p>
         </a>
     </div>
 
+    
+    <script async src="js/version.js"></script>
 
     <script>
 
@@ -128,6 +130,15 @@
                   }
                 });
         }
+
+        var versionchk = function(){
+            if(versionName){
+                $("#versionname").text(versionName);
+                return;
+            }
+            setTimeout(versionchk,333);
+        }
+        setTimeout(versionchk,333);
     </script>
 </body>
 </html>
