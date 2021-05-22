@@ -2,12 +2,12 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>添加消费</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="jquery-3.6.0.js"></script>
-    <script src="sweetalert.min.js"></script>
-    <script src="common.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="lib/jquery-3.6.0.js"></script>
+    <script src="lib/sweetalert.min.js"></script>
+    <script src="js/common.js"></script>
     <style>
         
         .keyboard{
@@ -20,7 +20,6 @@
                                  "n4 n5 n6 ok1"
                                  "n7 n8 n9 ok2"
                                  "n0 n0 nd ok2";
-            background-color: rgb(238, 238, 238);
         }
         .txtbtn{
             font-size: 24px;
@@ -29,10 +28,10 @@
     </style>
 </head>
 <body>
-    <div class="header" style="padding-right: 50px;"><p class="back" onclick="window.history.back()">&lt;</p><p>添加消费</p></div>
+    <div class="header2" style="padding-right: 50px;"><p class="back" onclick="window.history.back()">&lt;</p><p>添加消费</p></div>
     <div class="flexspace"></div>
     <p class="hint">添加消费：</p>
-    <div class="input">
+    <div class="input shrinkshadow">
         <span id="input"></span>
     </div>
 
@@ -50,9 +49,9 @@
         <div class="num key" style="grid-area: n9;">9</div>
         <div class="num key" style="grid-area: n0;">0</div>
         <div class="dot key" style="grid-area: nd;">.</div>
-        <div class="backspace key" style="grid-area: bs;"><img src="backspace.png" width="40px" height="30px" alt=""></div>
-        <div class="txtbtn btnok1 key" style="grid-area: ok1;">其它<br>支出</div>
-        <div class="txtbtn btnok key" style="grid-area: ok2; color: white;">饭钱<br>支出</div>
+        <div class="backspace key" style="grid-area: bs;"><img src="img/backspace.png" width="30px" height="20px" alt=""></div>
+        <div class="key btnok1" style="grid-area: ok1;font-size: 20px;">其它<br>支出</div>
+        <div class="key btnok" style="grid-area: ok2; font-size: 20px;">饭钱<br>支出</div>
     </div>
 
     <script>

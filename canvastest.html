@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background: linear-gradient(135deg, #a88e89 0%,#f16f5c 50%,#613630 51%,#548b71 71%,#695196 100%);
+        }
+    </style>
+</head>
+<body>
+    <canvas width="300" height="300" id="canvas"></canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var graphics = canvas.getContext("2d");
+        
+        function drawPercentage(_cg,width,height,donecolor,undonecolor,progress){
+            var cg=_cg;
+            cg.clearRect(0,0,width,height);
+            cg.translate(width/2,height/2);
+            var step = Math.PI * 2 / 100;
+            for (let i = 0; i < 100; i++) {
+                if(i<progress){
+                    cg.fillStyle=donecolor;
+                }
+                else{
+                    cg.fillStyle=undonecolor;
+                }
+                var barWidth = width / 100;
+                var barHeight = width / 20;
+                cg.fillRect(-barWidth / 2 ,-height/2,barWidth,barHeight)
+                cg.rotate(step);
+            }
+            cg.resetTransform();
+        }
+
+        drawPercentage(graphics,300,300,"#fff","#000",45);
+
+    </script>
+</body>
+</html>

@@ -2,12 +2,12 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>设置</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="jquery-3.6.0.js"></script>
-    <script src="sweetalert.min.js"></script>
-    <script src="common.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="lib/jquery-3.6.0.js"></script>
+    <script src="lib/sweetalert.min.js"></script>
+    <script src="js/common.js"></script>
     <style>
         .edittext{
             font-size: 16px;
@@ -18,15 +18,12 @@
             padding-left: 10px;
             padding-right: 10px;
             border-top: none;
-            border-bottom: solid gray 2px;
             border-left: none;
+            border-radius: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
             border-right: none;
-        }
-        .edittext:focus,.edittext:focus-within,.edittext:focus-visible{
-            border-top: none;
-            border-bottom: solid var(--theme) 2px;
-            border-left: none;
-            border-right: none; 
+            background-color: rgb(231, 231, 255);
         }
 
         .buttonok{
@@ -38,18 +35,18 @@
     </style>
 </head>
 <body>
-    <div class="header" style="padding-right: 50px;"><p class="back" onclick="window.history.back()">&lt;</p><p>设置</p></div>
-    <div style="overflow: auto; flex-grow: 2; padding: 8px; box-sizing: border-box;" >
+    <div class="header2"><p>设置</p></div>
+    <div style="overflow: scroll; flex-grow: 2; padding: 20px; box-sizing: border-box;" >
         
         <form name="setting" action="javascript:void(0)" onsubmit="saveSettings()">
             <p>每月总预算：</p>
-            <input type="text" name="monthBudget" class="edittext">
+            <input type="text" name="monthBudget" class="shrinkshadow edittext">
             <p>吃饭最低消费：</p>
-            <input type="text" name="minMeal" class="edittext">
+            <input type="text" name="minMeal" class="shrinkshadow edittext">
             <p>本月总预算：</p>
-            <input type="text" name="currentBudget" class="edittext">
-            
-            <input class="commonbutton buttonblue buttonok" type="submit" value="提交">
+            <input type="text" name="currentBudget" class="shrinkshadow edittext">
+            <input class="bumpshadow commonbutton buttonblue buttonok" type="submit" value="保存设置">
+            <input class="bumpshadow commonbutton buttonblue buttonok" id="btnbudget" value="预算加减">
         </form>
 
     </div>
@@ -59,7 +56,33 @@
         版本号:1.2.0.0　<a href="javascript:reset()">重置程序</a>
     </div>
 
+    
+    <div class="bottomnav bumpshadow">
+        <a href="index.html" class="navitem">
+            <img src="img/menu-home-normal.png" alt="" width="20" height="20">
+            <p>首页</p>
+        </a>
+
+
+        <a href="history.html" class="navitem">
+            <img src="img/bill.png" alt="" width="20" height="20">
+            <p>账单</p>
+        </a>
+        
+        <a href="setting.html" class="selected navitem">
+            <img src="img/setting-copy.png" alt="" width="20" height="20">
+            <p>设置</p>
+        </a>
+    </div>
+
+
     <script>
+
+        
+        $("#btnbudget").click(()=>{
+            window.location.href="add.html";
+        });
+
         document.setting.monthBudget.value = NextCalc.getDefaultBudget();
         document.setting.minMeal.value = NextCalc.minMeal;
         document.setting.currentBudget.value = NextCalc.totalAmount;

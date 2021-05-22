@@ -2,12 +2,12 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, , user-scalable=no">
     <title>消费记录</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="jquery-3.6.0.js"></script>
-    <script src="sweetalert.min.js"></script>
-    <script src="common.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="lib/jquery-3.6.0.js"></script>
+    <script src="lib/sweetalert.min.js"></script>
+    <script src="js/common.js"></script>
     <style>
         .listitem{
             height: 50px;
@@ -20,7 +20,7 @@
         .line{
             width:100%;
             height: 1px;
-            background-color: gray;
+            background-color: rgb(184, 179, 226);
         }
         .template{
             display: none;
@@ -32,23 +32,22 @@
             height: 50px;
         }
         .delete{
-            background-color: red;
-            color: white;
-            border-radius: 4px;
+            color: red;
+            border-radius: 25px;
             padding: 5px;
             margin-right: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="header" style="padding-right: 50px;"><p class="back" onclick="window.history.back()">&lt;</p><p>消费记录</p></div>
+    <div class="header2" ><p>消费记录</p></div>
     <div class="template">
         <div class="listitem">
             <div class="line"></div>
             <div class="listinner">
                 <p style="padding-left: 10px;">在 {DAY} {TYPE}了 {AMOUNT} </p>
                 <div class="flexspace"></div>
-                <div class="delete" onclick="deleteEntryAt({ID})">删除记录</div>
+                <div class="commonbutton bumpshadow delete" onclick="deleteEntryAt({ID})">删除记录</div>
             </div>
             
         </div>
@@ -57,6 +56,25 @@
     <div class="list" style="overflow: auto; flex-grow: 2;" >
         
     </div>
+
+    <div class="bottomnav bumpshadow">
+        <a href="index.html" class="navitem">
+            <img src="img/menu-home-normal.png" alt="" width="20" height="20">
+            <p>首页</p>
+        </a>
+
+
+        <a href="history.html" class="selected  navitem">
+            <img src="img/bill.png" alt="" width="20" height="20">
+            <p>账单</p>
+        </a>
+        
+        <a href="setting.html" class="navitem">
+            <img src="img/setting-copy.png" alt="" width="20" height="20">
+            <p>设置</p>
+        </a>
+    </div>
+
 
     <script>
         var result="";
@@ -86,9 +104,11 @@
                   dangerMode: true,
                 })
                 .then((willDelete) => {
-                  NextCalc.entrySequence.splice(num,1);
-                  NextCalc.saveState();
+                  
+
                   if (willDelete) {
+                    NextCalc.entrySequence.splice(num,1);
+                    NextCalc.saveState();
                     swal("删除完成", {
                       icon: "success",
                     }).then(()=>{

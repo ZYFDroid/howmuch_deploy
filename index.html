@@ -4,23 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>我下一顿饭可以花多少钱</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="jquery-3.6.0.js"></script>
-    <script src="sweetalert.min.js"></script>
-    <script src="common.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="lib/jquery-3.6.0.js"></script>
+    <script src="lib/sweetalert.min.js"></script>
+    <script src="js/common.js"></script>
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="icon" href="/icon.png" type="image/png" />
+    <link rel="icon" href="img/icon.png" type="image/png" />
     <style>
         .next{
             width: 100%;
             text-align: center;
+            flex: 0 0 60%;
+            height: 60vh;
         }
         #nextmoney{
-            font-size: 80px;
-            color: var(--theme);
-            line-height: 60vh;
+            font-size: 50px;
+            color: black;
+            position: absolute;
+            left: 50%;    
+		    top:40%;     
+		    transform:translate(-50%,-50%);
         }
         
+
+        .canvasprogress{
+            position: absolute;
+            left: calc(50% - 128px);
+            top: calc(40% - 128px);
+            z-index: -999;
+        }
+
+        .statisticstext{
+            font-size: 10px;
+            text-align: center;
+        }
+        .circlebg{
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            left: calc(50% - 100px);
+            background-clip: border-box;
+            border-radius: 100%;
+            background-color: rgb(233, 233, 255);
+            top: calc(40% - 100px);
+            z-index: -498;
+        }
+
     </style>
 </head>
 <body>
@@ -36,31 +65,51 @@
 	});
 	</script>
 
-    <div class="header"><p>我下一顿饭可以花多少钱</p></div>
+    <div class="header2"><p>我下一顿饭可以花多少钱</p></div>
     <div class="next">
+        <canvas class="canvasprogress" width="256" height="256" id="progress"></canvas>
+        <div class="circlebg bumpshadow">
+
+        </div>
         <p id="nextmoney">0.00</p>
-        <p class="themetext">本月总生活费 <span id="total">0</span>，剩余 <span id="estimate">0</span></p>
         
     </div>
-    <div class="warn" style="display: none; text-align: center; margin: auto; font-size: 14px; line-height: 24px; color: red;">
-        <img src="warn.png" width="24px" height="24px" align="left" alt=""><span id="warntxt">警告</span>
+    
+    <p class="statisticstext">本月总生活费 <span id="total">0</span>，剩余 <span id="estimate">0</span></p>
+    <div class="warn" style="display: none; text-align: center; margin: auto; font-size: 10px; line-height: 24px; color: red;">
+        <img src="img/warn.png" width="24px" height="24px" align="left" alt=""><span id="warntxt">警告</span>
     </div>
     <div class="buttons">
-        <button id="btnbudget"  class="largebutton commonbutton buttonblue">预算管理</button>
-        <button id="btnconsume" class="largebutton commonbutton buttonorange">记录消费</button>
+        <!-- <button id="btnbudget"  class="largebutton commonbutton  bumpshadow">预算管理</button> -->
+        <button id="btnconsume" class="largebutton commonbutton  bumpshadow">记录消费</button>
     </div>
     <div class="flexspace"></div>
-    <div class="links">
-        <a href="setting.html">设置</a> <a href="history.html">历史记录</a>
+
+    <div class="bottomnav bumpshadow">
+        <a href="index.html" class="selected navitem">
+            <img src="img/menu-home-normal.png" alt="" width="20" height="20">
+            <p>首页</p>
+        </a>
+
+
+        <a href="history.html" class="navitem">
+            <img src="img/bill.png" alt="" width="20" height="20">
+            <p>账单</p>
+        </a>
+        
+        <a href="setting.html" class="navitem">
+            <img src="img/setting-copy.png" alt="" width="20" height="20">
+            <p>设置</p>
+        </a>
     </div>
+
+
+
     <script>
         $("#nextmoney").text(NextCalc.formatNumber(NextCalc.computeNext()));
         $("#estimate").text(NextCalc.formatNumber(NextCalc.getAvailableAmount()));
         $("#total").text(NextCalc.formatNumber(NextCalc.totalAmount));
         
-        $("#btnbudget").click(()=>{
-            window.location.href="add.html";
-        });
         $("#btnconsume").click(()=>{
             window.location.href="consume.html";
         });
@@ -74,8 +123,45 @@
                 $("#warntxt").text("预算已耗尽。");
             }
         }
+
+
+        var canvas = document.getElementById("progress");
+        var graphics = canvas.getContext("2d");
+        
+        function drawPercentage(_cg,width,height,donecolor,undonecolor,progress){
+            var cg=_cg;
+            cg.clearRect(0,0,width,height);
+            cg.translate(width/2,height/2);
+            var step = Math.PI * 2 / 100;
+            for (let i = 0; i < 100; i++) {
+                if(i<progress){
+                    cg.fillStyle=donecolor;
+                }
+                else{
+                    cg.fillStyle=undonecolor;
+                }
+                var barWidth = width / 100;
+                var barHeight = width / 20;
+                cg.fillRect(-barWidth / 2 ,-height/2,barWidth,barHeight)
+                cg.rotate(step);
+            }
+            cg.resetTransform();
+        }
+
+        var canvas_progress_count = 0;
+        var canvas_progress_target =100 - Math.round( NextCalc.getAvailableAmount() /NextCalc.totalAmount  * 100);
+
+        var canvas_anim = function(){
+            drawPercentage(graphics,256,256,"#47B","#8cf",canvas_progress_count);
+            canvas_progress_count++;
+            if(canvas_progress_count<=canvas_progress_target){
+                setTimeout(canvas_anim,16);
+            }
+        }
+        drawPercentage(graphics,256,256,"#47B","#8cf",canvas_progress_count);
+        setTimeout(canvas_anim,200);
     </script>
 
-    <script async src="version.js"></script>
+    <script async src="js/version.js"></script>
 </body>
 </html>

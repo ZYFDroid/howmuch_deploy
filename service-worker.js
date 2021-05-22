@@ -1,16 +1,14 @@
-var cacheName = 'howmuch_v1';     // 缓存的名称  
-// install 事件，它发生在浏览器安装并注册 Service Worker 时        
+var cacheName = 'howmuch_v1'; 
 self.addEventListener('install', event => { 
-/* event.waitUtil 用于在安装成功之前执行一些预装逻辑
- 但是建议只做一些轻量级和非常重要资源的缓存，减少安装失败的概率
- 安装成功后 ServiceWorker 状态会从 installing 变为 installed */
   caches.delete("howmuch_v1").then((f)=>console.log(f));
   event.waitUntil(
     caches.open(cacheName)                  
-    .then(cache => cache.addAll([    // 如果所有的文件都成功缓存了，便会安装完成。如果任何文件下载失败了，那么安装过程也会随之失败。        
-      '/common.js',
-      '/jquery-3.6.0.js',
-      'style.css'
+    .then(cache => cache.addAll([      
+      'js/common.js',
+      'lib/jquery-3.6.0.js',
+      'lib/sweetalert.min.js',
+      'lib/vue.js',
+      'css/style.css'
     ]))
   );
 });
@@ -25,6 +23,7 @@ var fetchHandler = function(event){
 
   event.respondWith(caches.match(event.request).then(
     function(response){
+      //不缓存version.js防止版本无法更新
       if(event.request.url.endsWith("version.js")){
         return (fetch(event.request).then(
           function (response) {
@@ -42,8 +41,6 @@ var fetchHandler = function(event){
           if (!response || response.status !== 200) {
             return response;
           }
-          
-
           var responseToCache = response.clone();
           caches.open(cacheName)
             .then(function (cache) {
