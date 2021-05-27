@@ -1,6 +1,6 @@
 var versionKey="_version";
-var versionName = "2.0.1.1";
-var versionCode=2000101;
+var versionName = "2.0.1.2";
+var versionCode=2000102;
 var cacheName="howmuch_v1";
 
 var devMode = false;
