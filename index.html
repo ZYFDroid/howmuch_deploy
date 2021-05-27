@@ -118,9 +118,10 @@
             if(warn==1){
                 $("#warntxt").text("本月预算已超支，可能会在月末之前耗尽，请调整支出。");
             }
-            if(warn==2){
-                $("#warntxt").text("预算已耗尽。");
+            if(warn>=2){
+                $("#warntxt").text("您没钱了。");
             }
+            
         }
 
 

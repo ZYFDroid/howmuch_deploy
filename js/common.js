@@ -107,6 +107,10 @@ var NextCalc = {
     },
 
     getWarnLevel:function(){
+        if(this.getAvailableAmount() < 0){
+            return 3;
+        }
+
         if(this.computeNext()<1){
             return 2;
         }
