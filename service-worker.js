@@ -18,7 +18,7 @@ var fetchHandler = function(event){
 
   //不缓存version.js防止版本无法更新
   if(event.request.url.endsWith("version.js")){
-    event.respondWith(fetch(event.request).then(
+    event.respondWith(fetch(event.request.url,{ cache: 'no-cache' }).then(
       function (response) {
         return response;
       }
