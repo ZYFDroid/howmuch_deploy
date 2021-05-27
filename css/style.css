@@ -14,7 +14,9 @@
 .shrinkshadow{
     box-shadow: -4px -4px 6px white inset, 4px 4px 6px rgb(182, 182, 214) inset;
 }
-
+html {
+    touch-action: manipulation;
+}
 body{
     width: 100vw;
     height: 100vh;
